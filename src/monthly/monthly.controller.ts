@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { IMonthly } from './interface/monthly.interface';
 import { MonthlyService } from './monthly.service';
 import { CreateMonthlyDto, UpdateMonthlyDto } from './dto/monthly.dto';
@@ -23,9 +31,15 @@ export class MonthlyController {
     return this.findAll();
   }
 
-  @Put()
+  @Put(':id')
   update(@Body() updateMonthlyDto: UpdateMonthlyDto): IMonthly[] {
     this.monthlyService.update(updateMonthlyDto);
+    return this.findAll();
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string): IMonthly[] {
+    this.monthlyService.remove(id);
     return this.findAll();
   }
 }
