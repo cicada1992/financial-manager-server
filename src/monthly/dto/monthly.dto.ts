@@ -6,7 +6,7 @@ export class CreateMonthlyDto {
 }
 
 export class UpdateMonthlyDto {
-  id: string;
+  id: number;
   name: string;
   amount: number;
   done: boolean;

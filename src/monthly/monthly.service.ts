@@ -1,35 +1,39 @@
 import { Injectable } from '@nestjs/common';
-import { IMonthly } from './interface/monthly.interface';
 import { CreateMonthlyDto, UpdateMonthlyDto } from './dto/monthly.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { MonthlyEntity } from '../domain/monthly.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class MonthlyService {
-  private monthlyList: Array<IMonthly> = [];
+  constructor(
+    @InjectRepository(MonthlyEntity)
+    private monthlyRepository: Repository<MonthlyEntity>,
+  ) {}
 
-  findAll(): Array<IMonthly> {
-    return this.monthlyList;
+  findAll(): Promise<MonthlyEntity[]> {
+    return this.monthlyRepository.find();
   }
 
-  findOne(id: string): IMonthly {
-    return this.monthlyList.find((row) => row.id === id);
+  findOne(id: number): Promise<MonthlyEntity> {
+    return this.monthlyRepository.findOne({ where: { id } });
   }
 
-  create(monthly: CreateMonthlyDto): void {
-    this.monthlyList.push({
-      id: String(this.monthlyList.length + 1),
-      ...monthly,
-    });
+  async create(monthly: CreateMonthlyDto): Promise<MonthlyEntity[]> {
+    await this.monthlyRepository.save(monthly);
+    return this.monthlyRepository.find();
   }
 
-  update(monthly: UpdateMonthlyDto): void {
-    const target = this.monthlyList.find((row) => row.id === monthly.id);
-    if (!target) throw new Error('Not found');
-    target.name = monthly.name;
-    target.amount = monthly.amount;
-    target.done = monthly.done;
+  async update(monthly: UpdateMonthlyDto): Promise<MonthlyEntity[]> {
+    const existed = await this.findOne(monthly.id);
+    if (!existed) throw new Error('Monthly not found');
+    const nextMonthly = { ...existed, ...monthly };
+    await this.monthlyRepository.save(nextMonthly);
+    return this.monthlyRepository.find();
   }
 
-  remove(id: string): void {
-    this.monthlyList = this.monthlyList.filter((row) => row.id !== id);
+  async remove(id: number): Promise<MonthlyEntity[]> {
+    await this.monthlyRepository.delete(id);
+    return this.monthlyRepository.find();
   }
 }

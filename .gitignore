@@ -37,4 +37,8 @@ lerna-debug.log*
 # Docker
 doc
 
+# 환경변수
 .env
+
+# Database
+db
