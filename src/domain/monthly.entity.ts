@@ -1,7 +1,14 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { User } from './user.entity';
 
 @Entity({ schema: 'test', name: 'monthly' })
-export class MonthlyEntity {
+export class Monthly {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -16,4 +23,7 @@ export class MonthlyEntity {
 
   @Column()
   type: 'INCOME' | 'SPEND';
+
+  @ManyToOne(() => User, (user) => user.id)
+  user: User;
 }

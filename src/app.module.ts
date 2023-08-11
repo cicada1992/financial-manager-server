@@ -6,12 +6,14 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MonthlyModule } from './monthly/monthly.module';
 import { ormConfig } from './orm.config';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({ useFactory: ormConfig }),
     MonthlyModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
