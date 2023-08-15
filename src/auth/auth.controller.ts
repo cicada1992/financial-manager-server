@@ -11,7 +11,7 @@ import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { UserDto } from './dto/user.dto';
 import { MyAuthGuard } from './security/auth.guard';
-import { ILoginResponse, ISecurityPayload } from './types';
+import { ILoginResponse } from './types';
 
 @Controller('auth')
 export class AuthController {

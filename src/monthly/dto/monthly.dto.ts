@@ -3,6 +3,8 @@ export class CreateMonthlyDto {
   amount: number;
   done: boolean;
   type: 'INCOME' | 'SPEND';
+  /** user email */
+  userId: string;
 }
 
 export class UpdateMonthlyDto {
@@ -11,4 +13,6 @@ export class UpdateMonthlyDto {
   amount: number;
   done: boolean;
   type: 'INCOME' | 'SPEND';
+  /** user email */
+  userId: string;
 }

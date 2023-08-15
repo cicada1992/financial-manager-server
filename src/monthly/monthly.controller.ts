@@ -15,9 +15,9 @@ import { Monthly } from '../domain/monthly.entity';
 export class MonthlyController {
   constructor(private readonly monthlyService: MonthlyService) {}
 
-  @Get()
-  async findAll(): Promise<Monthly[]> {
-    return await this.monthlyService.findAll();
+  @Get(':userEmail')
+  async findAll(@Param('userEmail') userEmail: string): Promise<Monthly[]> {
+    return await this.monthlyService.findAll(userEmail);
   }
 
   @Get(':id')
