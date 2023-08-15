@@ -15,6 +15,6 @@ export class User {
   @Column()
   password: string;
 
-  @OneToMany(() => Monthly, (monthly) => monthly.user, { nullable: true })
+  @OneToMany(() => Monthly, (monthly) => monthly.id)
   monthly: Monthly;
 }

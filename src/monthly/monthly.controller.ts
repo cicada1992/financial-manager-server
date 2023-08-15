@@ -20,7 +20,7 @@ export class MonthlyController {
     return await this.monthlyService.findAll(userEmail);
   }
 
-  @Get(':id')
+  @Get(':userEmail/:id')
   async findOne(@Param('id') id: number): Promise<Monthly> {
     return await this.monthlyService.findOne(id);
   }

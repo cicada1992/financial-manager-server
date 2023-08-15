@@ -1,8 +1,8 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from './user.entity';
@@ -24,6 +24,9 @@ export class Monthly {
   @Column()
   type: 'INCOME' | 'SPEND';
 
-  @ManyToOne(() => User, (user) => user.id)
+  @Column()
+  userId: string;
+
+  @ManyToOne(() => User, (user) => user.email)
   user: User;
 }
