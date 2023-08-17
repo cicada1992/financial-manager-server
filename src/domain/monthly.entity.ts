@@ -12,19 +12,19 @@ export class Monthly {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'varchar' })
   name: string;
 
-  @Column()
+  @Column({ type: 'int' })
   amount: number;
 
-  @Column()
+  @Column({ type: 'boolean' })
   done: boolean;
 
-  @Column()
+  @Column({ type: 'varchar' })
   type: 'INCOME' | 'SPEND';
 
-  @Column()
+  @Column({ type: 'varchar' })
   userId: string;
 
   @ManyToOne(() => User, (user) => user.email)
