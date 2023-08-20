@@ -1,9 +1,11 @@
+import { YYYYMMDD } from 'src/types';
+
 export class CreateMonthlyDto {
   name: string;
   amount: number;
   done: boolean;
   type: 'INCOME' | 'SPEND';
-  month: number;
+  date: YYYYMMDD;
   /** user email */
   userId: string;
 }
@@ -14,7 +16,7 @@ export class UpdateMonthlyDto {
   amount: number;
   done: boolean;
   type: 'INCOME' | 'SPEND';
-  month: number;
+  date: YYYYMMDD;
   /** user email */
   userId: string;
 }

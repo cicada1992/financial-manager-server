@@ -1,5 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './user.entity';
+import { YYYYMMDD } from 'src/types';
 
 @Entity({ schema: 'test', name: 'monthly' })
 export class Monthly {
@@ -18,8 +19,8 @@ export class Monthly {
   @Column({ type: 'varchar' })
   type: 'INCOME' | 'SPEND';
 
-  @Column({ type: 'int' })
-  month: number;
+  @Column({ type: 'varchar' })
+  date: YYYYMMDD;
 
   @Column({ type: 'varchar' })
   userId: string;

@@ -11,6 +11,7 @@ import {
 import { MonthlyService } from './monthly.service';
 import { CreateMonthlyDto, UpdateMonthlyDto } from './dto/monthly.dto';
 import { Monthly } from '../domain/monthly.entity';
+import { YYYYMM } from 'src/types';
 
 @Controller('monthly')
 export class MonthlyController {
@@ -19,9 +20,9 @@ export class MonthlyController {
   @Get()
   async findAll(
     @Query('userEmail') userEmail: string,
-    @Query('month') month: number,
+    @Query('date') date: YYYYMM,
   ): Promise<Monthly[]> {
-    return await this.monthlyService.findAll(userEmail, month);
+    return await this.monthlyService.findAll(userEmail, date);
   }
 
   @Get(':userEmail/:id')
@@ -30,17 +31,23 @@ export class MonthlyController {
   }
 
   @Post()
-  create(@Body() createMonthlyDto: CreateMonthlyDto): Promise<Monthly[]> {
-    return this.monthlyService.create(createMonthlyDto);
+  create(
+    @Body() createMonthlyDto: CreateMonthlyDto,
+    @Query('date') date: YYYYMM,
+  ): Promise<Monthly[]> {
+    return this.monthlyService.create(createMonthlyDto, date);
   }
 
   @Put(':id')
-  update(@Body() updateMonthlyDto: UpdateMonthlyDto): Promise<Monthly[]> {
-    return this.monthlyService.update(updateMonthlyDto);
+  update(
+    @Body() updateMonthlyDto: UpdateMonthlyDto,
+    @Query('date') date: YYYYMM,
+  ): Promise<Monthly[]> {
+    return this.monthlyService.update(updateMonthlyDto, date);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number): Promise<Monthly[]> {
+  remove(@Param('id') id: number): Promise<void> {
     return this.monthlyService.remove(id);
   }
 }
