@@ -11,10 +11,11 @@ export class MonthlyService {
     private monthlyRepository: Repository<Monthly>,
   ) {}
 
-  findAll(userEmail: string): Promise<Monthly[]> {
+  findAll(userEmail: string, month: number): Promise<Monthly[]> {
     return this.monthlyRepository
       .createQueryBuilder('monthly')
       .where('monthly.userId = :userEmail', { userEmail })
+      .where({ month })
       .getMany();
   }
 
@@ -24,7 +25,7 @@ export class MonthlyService {
 
   async create(monthly: CreateMonthlyDto): Promise<Monthly[]> {
     await this.monthlyRepository.save(monthly as DeepPartial<Monthly>);
-    return this.findAll(monthly.userId);
+    return this.findAll(monthly.userId, monthly.month);
   }
 
   async update(monthly: UpdateMonthlyDto): Promise<Monthly[]> {
@@ -32,13 +33,13 @@ export class MonthlyService {
     if (!existed) throw new Error('Monthly not found');
     const nextMonthly = { ...existed, ...monthly };
     await this.monthlyRepository.save(nextMonthly as DeepPartial<Monthly>);
-    return this.findAll(monthly.userId);
+    return this.findAll(monthly.userId, monthly.month);
   }
 
   async remove(id: number): Promise<Monthly[]> {
     const existed = await this.findOne(id);
     if (!existed) throw new Error('Monthly not found');
     await this.monthlyRepository.delete(id);
-    return this.findAll(existed.userId);
+    return this.findAll(existed.userId, existed.month);
   }
 }

@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './user.entity';
 
 @Entity({ schema: 'test', name: 'monthly' })
@@ -23,6 +17,9 @@ export class Monthly {
 
   @Column({ type: 'varchar' })
   type: 'INCOME' | 'SPEND';
+
+  @Column({ type: 'int' })
+  month: number;
 
   @Column({ type: 'varchar' })
   userId: string;

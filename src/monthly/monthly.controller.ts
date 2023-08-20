@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { MonthlyService } from './monthly.service';
 import { CreateMonthlyDto, UpdateMonthlyDto } from './dto/monthly.dto';
@@ -15,9 +16,12 @@ import { Monthly } from '../domain/monthly.entity';
 export class MonthlyController {
   constructor(private readonly monthlyService: MonthlyService) {}
 
-  @Get(':userEmail')
-  async findAll(@Param('userEmail') userEmail: string): Promise<Monthly[]> {
-    return await this.monthlyService.findAll(userEmail);
+  @Get()
+  async findAll(
+    @Query('userEmail') userEmail: string,
+    @Query('month') month: number,
+  ): Promise<Monthly[]> {
+    return await this.monthlyService.findAll(userEmail, month);
   }
 
   @Get(':userEmail/:id')
