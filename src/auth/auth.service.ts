@@ -30,13 +30,19 @@ export class AuthService {
   }
 
   async validateUser(user: UserDto): Promise<ILoginResponse> {
-    const foundUser = await this.userService.findByFields({
-      where: { email: user.email },
-    });
-    if (!foundUser) throw new UnauthorizedException();
-    const isValid = await compare(user.password, foundUser.password);
-    if (!isValid) throw new UnauthorizedException();
+    const foundUser = await this.getValidUser(user);
     return { accessToken: this.generateToken(foundUser) };
+  }
+
+  async updateUser(user: UserDto): Promise<ILoginResponse> {
+    const foundUser = await this.getValidUser(user);
+    const nextUser = {
+      ...foundUser,
+      ...user,
+      password: foundUser.password,
+    };
+    await this.userService.update(nextUser);
+    return { accessToken: this.generateToken(nextUser) };
   }
 
   async validateToken(payload: ISecurityPayload): Promise<UserDto | undefined> {
@@ -50,5 +56,15 @@ export class AuthService {
       username: user.username,
     };
     return this.jwtSerivce.sign(payload);
+  }
+
+  private async getValidUser(user: UserDto) {
+    const foundUser = await this.userService.findByFields({
+      where: { email: user.email },
+    });
+    if (!foundUser) throw new UnauthorizedException();
+    const isValid = await compare(user.password, foundUser.password);
+    if (!isValid) throw new UnauthorizedException();
+    return foundUser;
   }
 }

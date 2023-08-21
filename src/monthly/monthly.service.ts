@@ -5,26 +5,26 @@ import { Monthly } from '../domain/monthly.entity';
 import { DeepPartial, Repository } from 'typeorm';
 import { YYYYMM, YYYYMMDD } from 'src/types';
 import dayjs from 'dayjs';
+import { User } from 'src/domain/user.entity';
 
 @Injectable()
 export class MonthlyService {
-  /**
-   * 기준일 (보통 월급일)
-   * TODO: 추후 setting에서 받아서 하도록 설정
-   */
-  private readonly baseDay = 25;
-
   constructor(
     @InjectRepository(Monthly)
     private monthlyRepository: Repository<Monthly>,
+    @InjectRepository(User)
+    private authRepository: Repository<User>,
   ) {}
 
   async findAll(userEmail: string, targetDate: YYYYMM): Promise<Monthly[]> {
+    const { referenceDate } = await this.authRepository.findOne({
+      where: { email: userEmail },
+    });
     const list = await this.monthlyRepository
       .createQueryBuilder('monthly')
       .where('monthly.userId = :userEmail', { userEmail })
       .getMany();
-    return this.filterTargetMonth(list, targetDate);
+    return this.filterTargetMonth(list, targetDate, referenceDate);
   }
 
   findOne(id: number): Promise<Monthly> {
@@ -56,10 +56,16 @@ export class MonthlyService {
     await this.monthlyRepository.delete(id);
   }
 
-  private filterTargetMonth(list: Monthly[], date: YYYYMMDD | YYYYMM) {
+  private filterTargetMonth(
+    list: Monthly[],
+    date: YYYYMMDD | YYYYMM,
+    referenceDate: number,
+  ) {
     // ex) 기준일 7월 25일 경우, 2023-07-25 ~ 2023-08-24 사이에 속하는 것만 가져오도록
-    const targetStartDate = dayjs(date).set('date', this.baseDay);
-    const targetEndDate = dayjs(date).set('date', this.baseDay).add(1, 'month');
+    const targetStartDate = dayjs(date).set('date', referenceDate);
+    const targetEndDate = dayjs(date)
+      .set('date', referenceDate)
+      .add(1, 'month');
     const isTarget = (item: Monthly) => {
       const converted = dayjs(item.date);
       return (

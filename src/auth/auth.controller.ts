@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Post,
+  Put,
   Req,
   Res,
   UseGuards,
@@ -37,6 +38,16 @@ export class AuthController {
     return res.json(jwt) as unknown as ILoginResponse;
   }
 
+  @Put('update')
+  async updateUser(
+    @Body() userDto: UserDto,
+    @Res() res: Response,
+  ): Promise<ILoginResponse> {
+    const jwt = await this.authService.updateUser(userDto);
+    res.setHeader('Authorization', `Bearer ${jwt.accessToken}`);
+    return res.json(jwt) as unknown as ILoginResponse;
+  }
+
   @Get('authenticated')
   @UseGuards(MyAuthGuard)
   isAuthenticated(@Req() req: Request): Omit<UserDto, 'password'> {
@@ -44,6 +55,7 @@ export class AuthController {
     return {
       email: user.email,
       username: user.username,
+      referenceDate: user.referenceDate,
     };
   }
 }

@@ -23,6 +23,10 @@ export class UserService {
     return await this.userRepository.save(userDto);
   }
 
+  update(userDto: UserDto): Promise<User> {
+    return this.userRepository.save(userDto);
+  }
+
   private async transformPassword(user: UserDto): Promise<void> {
     const hashed = await hash(user.password, this.saltRounds);
     user.password = hashed;

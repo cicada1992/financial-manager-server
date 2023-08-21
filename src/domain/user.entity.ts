@@ -15,6 +15,10 @@ export class User {
   @Column({ type: 'varchar' })
   password: string;
 
+  /** 월 기준일 (보통 월급날) */
+  @Column({ type: 'int' })
+  referenceDate: number;
+
   @OneToMany(() => Monthly, (monthly) => monthly.id)
   monthly: Monthly;
 }
