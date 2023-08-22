@@ -8,5 +8,5 @@ RUN npm install -g pnpm
 RUN pnpm install
 RUN pnpm build
 
-EXPOSE 8912
+EXPOSE 3001
 CMD ["node", "dist/main.js"]
