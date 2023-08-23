@@ -56,6 +56,23 @@ export class MonthlyService {
     await this.monthlyRepository.delete(id);
   }
 
+  async copy(userEmail: string, targetDate: YYYYMM): Promise<Monthly[]> {
+    const targetMonthData = await this.findAll(userEmail, targetDate);
+    const cloned = structuredClone(targetMonthData);
+    cloned.forEach((row) => {
+      row.id = undefined;
+      row.done = false;
+      row.date = dayjs(row.date)
+        .add(1, 'month')
+        .format('YYYY-MM-DD') as YYYYMMDD;
+    });
+    await Promise.all(cloned.map((row) => this.monthlyRepository.save(row)));
+    return this.findAll(
+      userEmail,
+      dayjs(targetDate).add(1, 'month').format('YYYY-MM') as YYYYMM,
+    );
+  }
+
   private filterTargetMonth(
     list: Monthly[],
     date: YYYYMMDD | YYYYMM,

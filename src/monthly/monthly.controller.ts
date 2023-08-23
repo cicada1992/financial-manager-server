@@ -18,16 +18,16 @@ export class MonthlyController {
   constructor(private readonly monthlyService: MonthlyService) {}
 
   @Get()
-  async findAll(
+  findAll(
     @Query('userEmail') userEmail: string,
     @Query('date') date: YYYYMM,
   ): Promise<Monthly[]> {
-    return await this.monthlyService.findAll(userEmail, date);
+    return this.monthlyService.findAll(userEmail, date);
   }
 
   @Get(':userEmail/:id')
-  async findOne(@Param('id') id: number): Promise<Monthly> {
-    return await this.monthlyService.findOne(id);
+  findOne(@Param('id') id: number): Promise<Monthly> {
+    return this.monthlyService.findOne(id);
   }
 
   @Post()
@@ -49,5 +49,13 @@ export class MonthlyController {
   @Delete(':id')
   remove(@Param('id') id: number): Promise<void> {
     return this.monthlyService.remove(id);
+  }
+
+  @Get('copy')
+  copy(
+    @Query('userEmail') userEmail: string,
+    @Query('date') date: YYYYMM,
+  ): Promise<Monthly[]> {
+    return this.monthlyService.copy(userEmail, date);
   }
 }
