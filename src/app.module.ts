@@ -7,12 +7,14 @@ import { AppService } from './app.service';
 import { MonthlyModule } from './monthly/monthly.module';
 import { ormConfig } from './orm.config';
 import { AuthModule } from './auth/auth.module';
+import { AnnuallyModule } from './annually/annually.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({ useFactory: ormConfig }),
     MonthlyModule,
+    AnnuallyModule,
     AuthModule,
   ],
   controllers: [AppController],
